@@ -23,8 +23,7 @@
 
     (function() {
         setProgress(50);
-
-        let url = `http://localhost:8080/weather/${city}/getWeather`;
+        let url = window.location.origin + `/weather/${city}/getWeather`;
 
         fetch(url).then((response) => {
             if (response.ok) {
