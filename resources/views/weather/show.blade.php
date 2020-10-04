@@ -18,6 +18,8 @@
             
             <div class="row">
                 <div id="weather-48hours-container" style="opacity: 0;" class="col"></div>
+
+                <canvas id="weather-48hours-canvas" style="opacity: 0;" width="400" height="400"></canvas>
             </div>
         </div>
     </div>
@@ -47,7 +49,8 @@
             hideProgress();
     
             displayCurrentWeatherData(data);
-            display48HoursWeatherData(data);
+            display48HoursWeatherHeader(data);
+            display48HoursWeatherDiagram(data);
         }
 
         function displayCurrentWeatherData(data)
@@ -134,7 +137,7 @@
             fadeInEffect(weatherDetailContainer);
         }
 
-        function display48HoursWeatherData(data)
+        function display48HoursWeatherHeader(data)
         {
             let titleBlock = document.createElement('div');
             titleBlock.innerHTML = `
@@ -144,43 +147,54 @@
                     </div>
                 </div>
             `;
-
-            let tbl = document.createElement('table');
-
-            tbl.style.width = '100%';
-            tbl.setAttribute('border', '1');
-
-            let tbdy = document.createElement('tbody');
-
-                let tr = document.createElement('tr');
-                for (let j = 0; j < 6; j++) {
-                    let hourlyData = data.hourly[j];
-                    let td = document.createElement('td');
-                    td.appendChild(document.createTextNode(convertTime(hourlyData.dt)))
-
-                    tr.appendChild(td)
-                }
-                tbdy.appendChild(tr);
-
-                let tr2 = document.createElement('tr');
-                for (let j = 0; j < 6; j++) {
-                    let hourlyData = data.hourly[j];
-                    let td = document.createElement('td');
-
-                    let element = document.createElement('div');
-                    element.innerHTML = `${hourlyData.temp} <small>&deg;C</small>`;
-                    td.appendChild(element)
-
-                    tr2.appendChild(td)
-                }
-                tbdy.appendChild(tr2);
-            
-            tbl.appendChild(tbdy);
-            
+        
             let weatherDataContainer = document.getElementById("weather-48hours-container");
             weatherDataContainer.appendChild(titleBlock);
-            weatherDataContainer.appendChild(tbl);
             fadeInEffect(weatherDataContainer);
+        }
+
+        function display48HoursWeatherDiagram(data)
+        {
+            let canvas = document.getElementById('weather-48hours-canvas');
+            var ctx = canvas.getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                    datasets: [{
+                        label: '# of Votes',
+                        data: [12, 19, 3, 5, 2, 3],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)',
+                            'rgba(255, 159, 64, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+            });
+
+            fadeInEffect(canvas);
         }
 
         function setProgress(value) {
@@ -244,7 +258,6 @@
 
             return t
         }
-
     })();
     
 </script>   
