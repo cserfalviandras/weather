@@ -13,7 +13,7 @@
             </div>
 
             <div class="row">
-                <div id="weather-detail-container" class="col"></div>
+                <div id="weather-detail-container" style="opacity: 0;" class="col"></div>
             </div>
             
         </div>
@@ -89,8 +89,10 @@
             `;
 
             row.appendChild(col);
-
-            document.getElementById("weather-detail-container").appendChild(row);
+            
+            let weatherDetailContainer = document.getElementById("weather-detail-container");
+            weatherDetailContainer.appendChild(row);
+            fadeInEffect(weatherDetailContainer);
         }
 
         function setProgress(value) {
@@ -106,6 +108,24 @@
             fadeOutEffect(progressBar);
         }
 
+        function fadeInEffect(element)
+        {
+            let fadeEffect2 = setInterval(function () {
+                if (!element.style.opacity) {
+                    element.style.opacity = 0;
+                }
+                if (element.style.opacity < 1) {
+                    let oldValue = element.style.opacity;
+                    let addValue = 0.1;
+                    let newVaue = parseFloat(oldValue) + parseFloat(addValue);
+
+                    element.style.opacity = newVaue;
+                } else {
+                    clearInterval(fadeEffect2);
+                }
+            }, 100);
+        }
+
         function fadeOutEffect(element)
         {
             let fadeEffect = setInterval(function () {
@@ -117,7 +137,7 @@
                 } else {
                     clearInterval(fadeEffect);
                 }
-            }, 200);
+            }, 100);
         }
 
         function processTimes(data)
