@@ -23,7 +23,7 @@
 
     (function() {
         setProgress(50);
-        let url = window.location.origin + `/weather/${city}/getWeather`;
+        let url = window.location.origin + `/weather/${city}/detailedForecast`;
 
         fetch(url).then((response) => {
             if (response.ok) {
