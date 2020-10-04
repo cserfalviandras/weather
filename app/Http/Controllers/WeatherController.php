@@ -16,8 +16,8 @@ class WeatherController extends Controller
 
     public function getCityWeatherData($city) 
     {
-        $url = 'https://weather-api-service.herokuapp.com/city-weather/'.$city;
-
+        $url = config('weather-api.base-url').'/city-weather/'.$city;
+        
         $response = Http::get($url);
 
         return $response->json();
