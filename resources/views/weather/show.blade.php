@@ -16,10 +16,16 @@
                 <div id="weather-current-container" style="opacity: 0;" class="col"></div>
             </div>
             
-            <div class="row">
+            <div class="row mt-3">
                 <div id="weather-48hours-container" style="opacity: 0;" class="col"></div>
 
                 <canvas id="weather-48hours-canvas" style="opacity: 0;" width="400" height="400"></canvas>
+            </div>
+
+            <div class="row mt-3">
+                <div id="weather-daily-container" style="opacity: 0;" class="col"></div>
+
+                <canvas id="weather-daily-canvas" style="opacity: 0;" width="400" height="400"></canvas>
             </div>
         </div>
     </div>
@@ -51,6 +57,8 @@
             displayCurrentWeatherData(data);
             display48HoursWeatherHeader(data);
             display48HoursWeatherDiagram(data);
+            displayDailyWeatherHeader();
+            displayDailyWeatherDiagram(data);
         }
 
         function displayCurrentWeatherData(data)
@@ -184,6 +192,71 @@
                     ]
                 },
                 options: {}
+            });
+
+            fadeInEffect(canvas);
+        }
+
+        function displayDailyWeatherHeader()
+        {
+            let titleBlock = document.createElement('div');
+            titleBlock.innerHTML = `
+                <div class="row">
+                    <div class="col">
+                        Next 7 days:
+                    </div>
+                </div>
+            `;
+        
+            let weatherDataContainer = document.getElementById("weather-daily-container");
+            weatherDataContainer.appendChild(titleBlock);
+            fadeInEffect(weatherDataContainer);
+        }
+
+        function displayDailyWeatherDiagram(data)
+        {
+            let labels = [0,1,2,3,4,5,6];
+
+            let maxes = data.daily.map(dailyData => {
+                return dailyData.temp.max;
+            });
+
+            let mins = data.daily.map(dailyData => {
+                return dailyData.temp.min;
+            });
+            
+            let canvas = document.getElementById('weather-daily-canvas');
+            let ctx = canvas.getContext('2d');
+            let myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Maximums',
+                            data: maxes,
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.2)',
+                            ],
+                            borderColor: [
+                                'rgba(255, 99, 132, 1)',
+                            ],
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Minimums',
+                            data: mins,
+                            backgroundColor: [
+                                'rgba(174, 200, 242, 0.2)',
+                            ],
+                            borderColor: [
+                                'rgba(174, 200, 242, 1)',
+                            ],
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {  }
             });
 
             fadeInEffect(canvas);
