@@ -215,7 +215,14 @@
 
         function displayDailyWeatherDiagram(data)
         {
-            let labels = [0,1,2,3,4,5,6];
+            let allDays= ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+            let labels = data.daily.map(dailyData => {
+                let d = new Date(dailyData.dt * 1000);
+                let dayName = allDays[d.getDay()];
+
+                return dayName;
+            });
 
             let maxes = data.daily.map(dailyData => {
                 return dailyData.temp.max;
