@@ -13,9 +13,14 @@
             </div>
 
             <div class="row">
-                <div id="weather-detail-container" class="col"></div>
+                <div id="weather-current-container" style="opacity: 0;" class="col"></div>
             </div>
             
+            <div class="row">
+                <div id="weather-48hours-container" style="opacity: 0;" class="col"></div>
+
+                <canvas id="weather-48hours-canvas" style="opacity: 0;" width="400" height="400"></canvas>
+            </div>
         </div>
     </div>
 <script>
@@ -23,7 +28,7 @@
 
     (function() {
         setProgress(50);
-        let url = window.location.origin + `/weather/${city}/getWeather`;
+        let url = window.location.origin + `/weather/${city}/detailedForecast`;
 
         fetch(url).then((response) => {
             if (response.ok) {
@@ -39,9 +44,17 @@
         });
 
         function displayWeatherData(data) {
+            console.log(data);
             setProgress(100);
             hideProgress();
+    
+            displayCurrentWeatherData(data);
+            display48HoursWeatherHeader(data);
+            display48HoursWeatherDiagram(data);
+        }
 
+        function displayCurrentWeatherData(data)
+        {
             data = processTimes(data);
 
             let row = document.createElement('div');
@@ -56,32 +69,61 @@
                         <div>&nbsp;</div>
                         <h4>${data.name}</h4>
                         <div class="temp">
-                            <small><small>TEMP:</small></small>
                             <div class="row">
-                                <div class="col ml-3">${data.main.temp} <small>&deg;C</small></div>
+                                <div class="col">
+                                    Current:
+                                </div>
                             </div>
                             <div class="row">
-                                <div class="col ml-3">${data.main.feels_like} <small>&deg;C (feels like)</small></div>
-                            </div>
+                                <div class="col">
+                                    <div class="row">
+                                        <div class="col"><small><small>TEMP:</small></small></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">${data.main.temp} <small>&deg;C</small></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <small><small>Feels like:</small></small>
+                                            <br>
+                                            ${data.main.feels_like} <small>&deg;C</small>
+                                        </div>
+                                    </div>
+                                </div>
 
-                            <small><small>HUMIDITY:</small></small>
-                            <div class="row">
-                                <div class="col ml-3">${data.main.humidity} <small>%</small></div>
-                            </div>
+                                <div class="col">
+                                    <div class="row">
+                                        <div class="col"><small><small>HUMIDITY:</small></small></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">${data.main.humidity} <small>%</small></div>
+                                    </div>
+                                </div>
 
-                            <small><small>WIND:</small></small>
-                            <div class="row">
-                                <div class="col ml-3">${data.wind.speed} <small>meter/sec</small></div>
-                            </div>
+                                <div class="col">
+                                    <div class="row">
+                                        <div class="col"><small><small>WIND:</small></small></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">${data.wind.speed} <small>meter/sec</small></div>
+                                    </div>
+                                </div>
 
-                            <small><small>SUNRISE:</small></small>
-                            <div class="row">
-                                <div class="col ml-3">${data.sys.sunrise}</div>
-                            </div>
-
-                            <small><small>SUNSET:</small></small>
-                            <div class="row">
-                                <div class="col ml-3">${data.sys.sunset}</div>
+                                <div class="col">
+                                    <div class="row">
+                                        <div class="col"><small><small>SUN:</small></small></div>
+                                    </div>
+                                    <div class="row">
+                                        <small><small>Rise:</small></small>
+                                        <br>
+                                        <div class="col">${data.sys.sunrise}</div>
+                                    </div>
+                                    <div class="row">
+                                        <small><small>Set:</small></small>
+                                        <br>
+                                        <div class="col">${data.sys.sunset}</div>
+                                    </div>
+                                </div>
                             </div>
                         <div>&nbsp;</div>
                     </div>
@@ -89,8 +131,62 @@
             `;
 
             row.appendChild(col);
+            
+            let weatherDetailContainer = document.getElementById("weather-current-container");
+            weatherDetailContainer.appendChild(row);
+            fadeInEffect(weatherDetailContainer);
+        }
 
-            document.getElementById("weather-detail-container").appendChild(row);
+        function display48HoursWeatherHeader(data)
+        {
+            let titleBlock = document.createElement('div');
+            titleBlock.innerHTML = `
+                <div class="row">
+                    <div class="col">
+                        Next hours:
+                    </div>
+                </div>
+            `;
+        
+            let weatherDataContainer = document.getElementById("weather-48hours-container");
+            weatherDataContainer.appendChild(titleBlock);
+            fadeInEffect(weatherDataContainer);
+        }
+
+        function display48HoursWeatherDiagram(data)
+        {
+            let times = data.hourly.map(hourlyData => {
+                return convertTime(hourlyData.dt);
+            });
+
+            let temps = data.hourly.map(hourlyData => {
+                return hourlyData.temp;
+            });
+            
+            let canvas = document.getElementById('weather-48hours-canvas');
+            let ctx = canvas.getContext('2d');
+            let myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: times,
+                    datasets: [
+                        {
+                            label: 'Temperature',
+                            data: temps,
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.2)',
+                            ],
+                            borderColor: [
+                                'rgba(255, 99, 132, 1)',
+                            ],
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {}
+            });
+
+            fadeInEffect(canvas);
         }
 
         function setProgress(value) {
@@ -106,6 +202,24 @@
             fadeOutEffect(progressBar);
         }
 
+        function fadeInEffect(element)
+        {
+            let fadeEffect2 = setInterval(function () {
+                if (!element.style.opacity) {
+                    element.style.opacity = 0;
+                }
+                if (element.style.opacity < 1) {
+                    let oldValue = element.style.opacity;
+                    let addValue = 0.1;
+                    let newVaue = parseFloat(oldValue) + parseFloat(addValue);
+
+                    element.style.opacity = newVaue;
+                } else {
+                    clearInterval(fadeEffect2);
+                }
+            }, 100);
+        }
+
         function fadeOutEffect(element)
         {
             let fadeEffect = setInterval(function () {
@@ -117,7 +231,7 @@
                 } else {
                     clearInterval(fadeEffect);
                 }
-            }, 200);
+            }, 100);
         }
 
         function processTimes(data)
@@ -136,7 +250,6 @@
 
             return t
         }
-
     })();
     
 </script>   
