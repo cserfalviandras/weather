@@ -163,35 +163,45 @@
 
         function display48HoursWeatherDiagram(data)
         {
-            let times = data.hourly.map(hourlyData => {
-                return convertTime(hourlyData.dt);
+            let times = [];
+            let temps = [];
+            let backgroundColors = [];
+            let borderColors = [];
+
+            data.hourly.forEach(hourlyData => {
+                times.push(convertTime(hourlyData.dt));
+                temps.push(hourlyData.temp);
+                backgroundColors.push('rgba(255, 99, 132, 0.2)');
+                borderColors.push('rgba(255, 99, 132, 1)');
             });
 
-            let temps = data.hourly.map(hourlyData => {
-                return hourlyData.temp;
-            });
-            
             let canvas = document.getElementById('weather-48hours-canvas');
             let ctx = canvas.getContext('2d');
             let myChart = new Chart(ctx, {
-                type: 'line',
+                type: 'bar',
                 data: {
                     labels: times,
                     datasets: [
                         {
-                            label: 'Temperature',
                             data: temps,
-                            backgroundColor: [
-                                'rgba(255, 99, 132, 0.2)',
-                            ],
-                            borderColor: [
-                                'rgba(255, 99, 132, 1)',
-                            ],
+                            backgroundColor: backgroundColors,
+                            borderColor: borderColors,
                             borderWidth: 1
                         }
                     ]
                 },
-                options: {}
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    },
+                    legend : {
+                        display: false
+                    }
+                }
             });
 
             fadeInEffect(canvas);
@@ -217,53 +227,65 @@
         {
             let allDays= ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
+            let maxes = [];
+            let mins = [];
+            let backgroundColorsMaxes = [];
+            let borderColorsMaxes = [];
+            let backgroundColorsMins = [];
+            let borderColorsMins = [];
+
+            data.daily.forEach(dailyData => {
+                maxes.push(dailyData.temp.max);
+                mins.push(dailyData.temp.min);
+                backgroundColorsMaxes.push('rgba(255, 99, 132, 0.2)');
+                borderColorsMaxes.push('rgba(255, 99, 132, 1)');
+                backgroundColorsMins.push('rgba(174, 200, 242, 0.8)');
+                borderColorsMins.push('rgba(174, 200, 242, 1)');
+            });
+
             let labels = data.daily.map(dailyData => {
                 let d = new Date(dailyData.dt * 1000);
                 let dayName = allDays[d.getDay()];
 
                 return dayName;
             });
-
-            let maxes = data.daily.map(dailyData => {
-                return dailyData.temp.max;
-            });
-
-            let mins = data.daily.map(dailyData => {
-                return dailyData.temp.min;
-            });
             
             let canvas = document.getElementById('weather-daily-canvas');
             let ctx = canvas.getContext('2d');
             let myChart = new Chart(ctx, {
-                type: 'line',
+                type: 'bar',
                 data: {
                     labels: labels,
                     datasets: [
                         {
-                            label: 'Maximums',
                             data: maxes,
-                            backgroundColor: [
-                                'rgba(255, 99, 132, 0.2)',
-                            ],
-                            borderColor: [
-                                'rgba(255, 99, 132, 1)',
-                            ],
+                            backgroundColor: backgroundColorsMaxes,
+                            borderColor: borderColorsMaxes,
                             borderWidth: 1
                         },
                         {
-                            label: 'Minimums',
                             data: mins,
-                            backgroundColor: [
-                                'rgba(174, 200, 242, 0.2)',
-                            ],
-                            borderColor: [
-                                'rgba(174, 200, 242, 1)',
-                            ],
+                            backgroundColor: backgroundColorsMins,
+                            borderColor: borderColorsMins,
                             borderWidth: 1
                         }
                     ]
                 },
-                options: {  }
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }],
+                        xAxes: [{
+                            stacked: true
+                        }]
+                    },
+                    legend : {
+                        display: false
+                    }
+                }
             });
 
             fadeInEffect(canvas);
