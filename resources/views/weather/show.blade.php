@@ -225,8 +225,7 @@
 
         function displayDailyWeatherDiagram(data)
         {
-            let allDays= ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-
+            let labels = [];
             let maxes = [];
             let mins = [];
             let backgroundColorsMaxes = [];
@@ -234,20 +233,21 @@
             let backgroundColorsMins = [];
             let borderColorsMins = [];
 
+            data.daily.splice(-3, 3);
             data.daily.forEach(dailyData => {
                 maxes.push(dailyData.temp.max);
                 mins.push(dailyData.temp.min);
+
+                labels.push(
+                    getWeekDay(dailyData.dt) + '\n' + 
+                    getRain(dailyData.rain || 0) + '\n' + 
+                    getPrecipitationPercent(dailyData.pop)
+                );
+
                 backgroundColorsMaxes.push('rgba(255, 99, 132, 0.2)');
                 borderColorsMaxes.push('rgba(255, 99, 132, 1)');
                 backgroundColorsMins.push('rgba(174, 200, 242, 0.8)');
                 borderColorsMins.push('rgba(174, 200, 242, 1)');
-            });
-
-            let labels = data.daily.map(dailyData => {
-                let d = new Date(dailyData.dt * 1000);
-                let dayName = allDays[d.getDay()];
-
-                return dayName;
             });
             
             let canvas = document.getElementById('weather-daily-canvas');
@@ -289,7 +289,7 @@
                         duration: 1,
                         onComplete: function () {
                             var chartInstance = this.chart,
-                                ctx = chartInstance.ctx;
+                            ctx = chartInstance.ctx;
                             ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontFamily);
                             ctx.textAlign = 'center';
                             ctx.textBaseline = 'bottom';
@@ -303,7 +303,16 @@
                             });
                         }
                     }
-                }
+                },
+                plugins: [{
+                    beforeInit: function(chart) {
+                        chart.data.labels.forEach(function(e, i, a) {
+                            if (/\n/.test(e)) {
+                                a[i] = e.split(/\n/);
+                            }
+                        });
+                    }
+                }]
             });
 
             fadeInEffect(canvas);
@@ -369,6 +378,23 @@
             let t = h + ":" + m.substr(-2)
 
             return t
+        }
+
+        function getWeekDay(dt) {
+            let weekDays= ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            let d = new Date(dt * 1000);
+
+            return weekDays[d.getDay()];
+        }
+
+        function getPrecipitationPercent(popValue) {
+            let percent = Math.floor(popValue * 100);
+
+            return percent == 0 ? '' : '(' + percent + ' %)';
+        }
+
+        function getRain(rain) {
+            return rain + ' mm';
         }
     })();
     
