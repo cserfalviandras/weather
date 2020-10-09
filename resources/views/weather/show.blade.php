@@ -233,6 +233,7 @@
             let backgroundColorsMins = [];
             let borderColorsMins = [];
 
+            data.daily.splice(-3, 3);
             data.daily.forEach(dailyData => {
                 maxes.push(dailyData.temp.max);
                 mins.push(dailyData.temp.min);
