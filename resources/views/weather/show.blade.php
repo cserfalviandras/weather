@@ -241,7 +241,7 @@
                 labels.push(
                     getWeekDay(dailyData.dt) + '\n' + 
                     getRain(dailyData.rain || 0) + '\n' + 
-                    `(${getPrecipitationPercent(dailyData.pop)})`
+                    getPrecipitationPercent(dailyData.pop)
                 );
 
                 backgroundColorsMaxes.push('rgba(255, 99, 132, 0.2)');
@@ -390,7 +390,7 @@
         function getPrecipitationPercent(popValue) {
             let percent = Math.floor(popValue * 100);
 
-            return percent + ' %';
+            return percent == 0 ? '' : '(' + percent + ' %)';
         }
 
         function getRain(rain) {
