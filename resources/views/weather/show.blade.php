@@ -358,7 +358,7 @@
                 let divInner = document.createElement('div');
 
                 divInner.innerHTML = `
-                    <div id="icon"><img id="wicon" src="http://openweathermap.org/img/w/${weatherData.icon}.png" alt="Weather icon"></div>
+                    <div id="icon"><img id="wicon" src="http://openweathermap.org/img/wn/${weatherData.icon}@2x.png" alt="Weather icon"></div>
                 `;
 
                 div.appendChild(divInner);
