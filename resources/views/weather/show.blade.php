@@ -331,6 +331,7 @@
                 let td2 = document.createElement('td');
                 let td3 = document.createElement('td');
                 let td7 = document.createElement('td');
+                let tds = document.createElement('td');
 
                 td1.innerHTML = getWeekDay(dailyData.dt);
                 td2.appendChild(getWeatherIcon(dailyData.weather));
@@ -339,6 +340,7 @@
 
                 tr.appendChild(td1);
                 tr.appendChild(td2);
+                tr.appendChild(tds)
                 tr.appendChild(td3);
                 tr.appendChild(td7);
 
