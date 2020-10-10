@@ -25,7 +25,10 @@
             <div class="row mt-3">
                 <div id="weather-daily-container" style="opacity: 0;" class="col"></div>
 
-                <canvas id="weather-daily-canvas" style="opacity: 0;" width="400" height="400"></canvas>
+                {{-- <canvas id="weather-daily-canvas" style="opacity: 0;" width="400" height="400"></canvas> --}}
+            </div>
+            <div class="row">
+                <div id="daily-weather-table-container-1" class="col"></div>
             </div>
         </div>
     </div>
@@ -58,7 +61,8 @@
             display48HoursWeatherHeader(data);
             display48HoursWeatherDiagram(data);
             displayDailyWeatherHeader();
-            displayDailyWeatherDiagram(data);
+            // displayDailyWeatherDiagram(data);
+            displayDailyWeatherTable(data);
         }
 
         function displayCurrentWeatherData(data)
@@ -233,7 +237,6 @@
             let backgroundColorsMins = [];
             let borderColorsMins = [];
 
-            data.daily.splice(-3, 3);
             data.daily.forEach(dailyData => {
                 maxes.push(dailyData.temp.max);
                 mins.push(dailyData.temp.min);
@@ -318,6 +321,52 @@
             fadeInEffect(canvas);
         }
 
+        function displayDailyWeatherTable(data) {
+            let table = document.createElement('table');
+
+            data.daily.forEach(dailyData => {
+                let tr = document.createElement('tr');
+
+                let td1 = document.createElement('td');
+                let td2 = document.createElement('td');
+                let td3 = document.createElement('td');
+                let td7 = document.createElement('td');
+
+                td1.innerHTML = getWeekDay(dailyData.dt);
+                td2.appendChild(getWeatherIcon(dailyData.weather));
+                td3.innerHTML = ` ${dailyData.temp.max}  <small>&deg;C</small><br>${dailyData.temp.min} <small>&deg;C</small>`;
+                td7.innerHTML = ` ${getRain(dailyData.rain)}<br>${getPrecipitationPercent(dailyData.pop)}`;
+
+                tr.appendChild(td1);
+                tr.appendChild(td2);
+                tr.appendChild(td3);
+                tr.appendChild(td7);
+
+                table.appendChild(tr);
+            });
+            
+            
+            let weatherDataContainer = document.getElementById("daily-weather-table-container-1");
+            weatherDataContainer.appendChild(table);
+            fadeInEffect(weatherDataContainer);
+        }
+
+        function getWeatherIcon(weather) {
+            let div = document.createElement('div');
+
+            weather.forEach(weatherData => {
+                let divInner = document.createElement('div');
+
+                divInner.innerHTML = `
+                    <div id="icon"><img id="wicon" src="http://openweathermap.org/img/w/${weatherData.icon}.png" alt="Weather icon"></div>
+                `;
+
+                div.appendChild(divInner);
+            });
+
+            return div;
+        }
+
         function setProgress(value) {
             let progressBar = document.getElementById("progress-bar");
 
@@ -346,7 +395,7 @@
                 } else {
                     clearInterval(fadeEffect2);
                 }
-            }, 100);
+            }, 200);
         }
 
         function fadeOutEffect(element)
@@ -394,7 +443,11 @@
         }
 
         function getRain(rain) {
-            return rain + ' mm';
+            if (rain !== undefined) {
+                return rain + ' mm';
+            }
+            
+            return '';
         }
     })();
     
