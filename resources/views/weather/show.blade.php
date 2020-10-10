@@ -25,7 +25,10 @@
             <div class="row mt-3">
                 <div id="weather-daily-container" style="opacity: 0;" class="col"></div>
 
-                <canvas id="weather-daily-canvas" style="opacity: 0;" width="400" height="400"></canvas>
+                {{-- <canvas id="weather-daily-canvas" style="opacity: 0;" width="400" height="400"></canvas> --}}
+            </div>
+            <div class="row">
+                <div id="daily-weather-table-container-1" class="col"></div>
             </div>
         </div>
     </div>
@@ -58,7 +61,8 @@
             display48HoursWeatherHeader(data);
             display48HoursWeatherDiagram(data);
             displayDailyWeatherHeader();
-            displayDailyWeatherDiagram(data);
+            // displayDailyWeatherDiagram(data);
+            displayDailyWeatherTable(data);
         }
 
         function displayCurrentWeatherData(data)
@@ -233,7 +237,6 @@
             let backgroundColorsMins = [];
             let borderColorsMins = [];
 
-            data.daily.splice(-3, 3);
             data.daily.forEach(dailyData => {
                 maxes.push(dailyData.temp.max);
                 mins.push(dailyData.temp.min);
@@ -318,6 +321,31 @@
             fadeInEffect(canvas);
         }
 
+        function displayDailyWeatherTable(data) {
+            let table = document.createElement('table');
+
+            data.daily.forEach(dailyData => {
+                let tr = document.createElement('tr');
+
+                tr.innerHTML = `
+                    <td>${getWeekDay(dailyData.dt)}: </td>
+                    <td>${dailyData.temp.max}</td>
+                    <td>/</td>
+                    <td>${dailyData.temp.min}</td>
+                    <td> <small>&deg;C</small></td>
+                    <td> ${getRain(dailyData.rain)}</td>
+                    <td>${getPrecipitationPercent(dailyData.pop)}</td>
+                `;
+
+                table.appendChild(tr);
+            });
+            
+            
+            let weatherDataContainer = document.getElementById("daily-weather-table-container-1");
+            weatherDataContainer.appendChild(table);
+            fadeInEffect(weatherDataContainer);
+        }
+
         function setProgress(value) {
             let progressBar = document.getElementById("progress-bar");
 
@@ -346,7 +374,7 @@
                 } else {
                     clearInterval(fadeEffect2);
                 }
-            }, 100);
+            }, 200);
         }
 
         function fadeOutEffect(element)
@@ -394,7 +422,11 @@
         }
 
         function getRain(rain) {
-            return rain + ' mm';
+            if (rain !== undefined) {
+                return rain + ' mm';
+            }
+            
+            return '';
         }
     })();
     
