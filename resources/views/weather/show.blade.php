@@ -327,15 +327,20 @@
             data.daily.forEach(dailyData => {
                 let tr = document.createElement('tr');
 
-                tr.innerHTML = `
-                    <td>${getWeekDay(dailyData.dt)}: </td>
-                    <td>${dailyData.temp.max}</td>
-                    <td>/</td>
-                    <td>${dailyData.temp.min}</td>
-                    <td> <small>&deg;C</small></td>
-                    <td> ${getRain(dailyData.rain)}</td>
-                    <td>${getPrecipitationPercent(dailyData.pop)}</td>
-                `;
+                let td1 = document.createElement('td');
+                let td2 = document.createElement('td');
+                let td3 = document.createElement('td');
+                let td7 = document.createElement('td');
+
+                td1.innerHTML = getWeekDay(dailyData.dt);
+                td2.appendChild(getWeatherIcon(dailyData.weather));
+                td3.innerHTML = ` ${dailyData.temp.max}  <small>&deg;C</small><br>${dailyData.temp.min} <small>&deg;C</small>`;
+                td7.innerHTML = ` ${getRain(dailyData.rain)}<br>${getPrecipitationPercent(dailyData.pop)}`;
+
+                tr.appendChild(td1);
+                tr.appendChild(td2);
+                tr.appendChild(td3);
+                tr.appendChild(td7);
 
                 table.appendChild(tr);
             });
@@ -344,6 +349,22 @@
             let weatherDataContainer = document.getElementById("daily-weather-table-container-1");
             weatherDataContainer.appendChild(table);
             fadeInEffect(weatherDataContainer);
+        }
+
+        function getWeatherIcon(weather) {
+            let div = document.createElement('div');
+
+            weather.forEach(weatherData => {
+                let divInner = document.createElement('div');
+
+                divInner.innerHTML = `
+                    <div id="icon"><img id="wicon" src="http://openweathermap.org/img/w/${weatherData.icon}.png" alt="Weather icon"></div>
+                `;
+
+                div.appendChild(divInner);
+            });
+
+            return div;
         }
 
         function setProgress(value) {
