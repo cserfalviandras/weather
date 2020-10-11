@@ -11,7 +11,6 @@
                     <div class="card">
                         <div class="card-header">
                             <a class="collapsed d-block" data-toggle="collapse" href="#current-body-container" aria-expanded="true" aria-controls="collapse-collapsed" id="heading-collapsed">
-                                <i class="fa fa-chevron-down pull-right"></i>
                                 Current 
                             </a>
                         </div>
@@ -30,7 +29,6 @@
                     <div class="card">
                         <div class="card-header">
                             <a class="collapsed d-block" data-toggle="collapse" href="#next-hours-body-container" aria-expanded="true" aria-controls="collapse-collapsed" id="heading-collapsed">
-                                <i class="fa fa-chevron-down pull-right"></i>
                                 Next hours 
                             </a>
                         </div>
@@ -49,7 +47,6 @@
                     <div class="card">
                         <div class="card-header">
                             <a class="collapsed d-block" data-toggle="collapse" href="#next-days-body-container" aria-expanded="true" aria-controls="collapse-collapsed" id="heading-collapsed">
-                                <i class="fa fa-chevron-down pull-right"></i>
                                 Next 7 days 
                             </a>
                         </div>
