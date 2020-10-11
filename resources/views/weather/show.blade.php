@@ -155,7 +155,7 @@
                     </div>
                     <div class="col-3" id="current-icon-container"></div>
                     <div class="col-4">
-                        <b>${data.main.temp}</b> <small>&deg;C</small>
+                        <b>${data.main.temp}</b> <small>&deg;C</small><br>
                         (${data.main.feels_like} <small>&deg;C</small>)
                     </div>
                 </div>
