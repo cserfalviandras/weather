@@ -28,16 +28,16 @@
                 <div class="col-sm-6 mt-2">
                     <div class="card">
                         <div class="card-header">
-                            <a class="collapsed d-block" data-toggle="collapse" href="#alerts-container" aria-expanded="true" aria-controls="collapse-collapsed" id="heading-collapsed">
+                            <a class="collapsed d-block" data-toggle="collapse" href="#alerts-outter-container" aria-expanded="true" aria-controls="collapse-collapsed" id="heading-collapsed">
                                 Alerts 
                             </a>
                         </div>
-                        <div id="alerts-container" class="collapse" aria-labelledby="heading-collapsed">
+                        <div id="alerts-outter-container" class="collapse" aria-labelledby="heading-collapsed">
                             <div class="card-body py-2 px-0" style="min-height:150px;">
                                 <div id="progress-container-alerts" class="progress col" style="height: 1;">
                                     <div id="progress-bar" class="progress-bar" role="progressbar" style="width: 1%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
-                                <div id="alerts-container" style="opacity: 0;"></div>
+                                <div id="alerts-container" class="pl-1" style="opacity: 0;"></div>
                             </div>
                         </div>
                       </div>
@@ -378,8 +378,35 @@
         }
 
         function displayAlerts(data) {
+            let alertsContainer = document.getElementById('alerts-container');
+
+            let table = document.createElement('table');
+            table.setAttribute('class', 'table table-striped');
+
+            data.alerts.forEach(alertData => {
+                let tr1 = document.createElement('tr');
+
+                let td1 = getTdElement();
+                let td21 = getTdElement();
+                let td22 = getTdElement();
+
+                // td1.appendChild();
+                td21.innerHTML = alertData.event;
+                td22.innerHTML = `${alertData.description}<br><small><small>${alertData.sender_name}</small></small>`;
+
+                tr1.appendChild(td1);
+                tr1.appendChild(td21);
+                tr1.appendChild(td22);
+
+                table.appendChild(tr1);
+            });
+
+            alertsContainer.appendChild(table);
+
             setProgress('progress-container-alerts', 100);
             hideProgress('progress-container-alerts');
+
+            fadeInEffect(alertsContainer);
         }
 
         function getTdElement() {
