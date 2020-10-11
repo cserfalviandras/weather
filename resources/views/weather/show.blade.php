@@ -390,7 +390,13 @@
                 let td21 = getTdElement();
                 let td22 = getTdElement();
 
-                // td1.appendChild();
+                td1.setAttribute('class', 'pr-2');
+
+                let i = document.createElement('i');
+                i.setAttribute('class', 'material-icons');
+                i.innerHTML = 'warning';
+
+                td1.appendChild(i);
                 td21.innerHTML = alertData.event;
                 td22.innerHTML = `${alertData.description}<br><small><small>${alertData.sender_name}</small></small>`;
 
