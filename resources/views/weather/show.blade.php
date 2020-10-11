@@ -18,7 +18,7 @@
                         <div class="card-header">
                             Current 
                         </div>
-                        <div class="card-body">
+                        <div class="card-body" style="min-height:150px;">
                             <div id="weather-current-container" style="opacity: 0;"></div>
                         </div>
                     </div>
@@ -29,7 +29,7 @@
                         <div class="card-header">
                             Next hours
                         </div>
-                        <div class="card-body">
+                        <div class="card-body" style="min-height:150px;">
                             <canvas id="weather-48hours-canvas" style="opacity: 0;" width="400" height="400"></canvas>
                         </div>
                       </div>
@@ -40,7 +40,7 @@
                         <div class="card-header">
                             Next 7 days
                         </div>
-                        <div class="card-body">
+                        <div class="card-body" style="min-height:150px;">
                             <div id="daily-weather-table-container-1" class="col"></div>
                         </div>
                   </div>
