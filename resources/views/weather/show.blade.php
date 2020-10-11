@@ -28,6 +28,24 @@
                 <div class="col-sm-6 mt-2">
                     <div class="card">
                         <div class="card-header">
+                            <a class="collapsed d-block" data-toggle="collapse" href="#alerts-container" aria-expanded="true" aria-controls="collapse-collapsed" id="heading-collapsed">
+                                Alerts 
+                            </a>
+                        </div>
+                        <div id="alerts-container" class="collapse" aria-labelledby="heading-collapsed">
+                            <div class="card-body py-2 px-0" style="min-height:150px;">
+                                <div id="progress-container-alerts" class="progress col" style="height: 1;">
+                                    <div id="progress-bar" class="progress-bar" role="progressbar" style="width: 1%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                                <div id="alerts-container" style="opacity: 0;"></div>
+                            </div>
+                        </div>
+                      </div>
+                </div>
+
+                <div class="col-sm-6 mt-2">
+                    <div class="card">
+                        <div class="card-header">
                             <a class="collapsed d-block" data-toggle="collapse" href="#next-hours-body-container" aria-expanded="true" aria-controls="collapse-collapsed" id="heading-collapsed">
                                 Next hours 
                             </a>
@@ -68,6 +86,7 @@
 
     (function() {
         setProgress('progress-container-current', 20);
+        setProgress('progress-container-alerts', 20);
         setProgress('progress-container-next-hours', 20);
         setProgress('progress-container-next-days', 20);
 
@@ -103,7 +122,6 @@
         function displayCurrent(data) {
             console.log(data);
             setProgress('progress-container-current', 60);
-            hideProgress('progress-container-current');
 
             displayCurrentWeatherData(data);
         }
@@ -111,12 +129,12 @@
         function displayDetailed(data) {
             console.log(data);
             setProgress('progress-container-next-hours', 60);
+            setProgress('progress-container-alerts', 60);
             setProgress('progress-container-next-days', 60);
-            hideProgress('progress-container-next-hours');
-            hideProgress('progress-container-next-days');
     
             display48HoursWeatherDiagram(data);
             displayDailyWeatherTable(data);
+            displayAlerts(data);
         }
 
         function displayCurrentWeatherData(data)
@@ -176,6 +194,7 @@
             currentIconContainer.appendChild(getWeatherIcon(data.weather));
 
             setProgress('progress-container-current', 100);
+            hideProgress('progress-container-current');
             fadeInEffect(weatherDetailContainer);
         }
 
@@ -223,6 +242,7 @@
             });
 
             setProgress('progress-container-next-hours', 100);
+            hideProgress('progress-container-next-hours');
             fadeInEffect(canvas);
         }
 
@@ -352,8 +372,14 @@
             
             let weatherDataContainer = document.getElementById("daily-weather-table-container-1");
             weatherDataContainer.appendChild(table);
-            setProgress('progress-container-current', 100);
+            setProgress('progress-container-next-days', 100);
+            hideProgress('progress-container-next-days');
             fadeInEffect(weatherDataContainer);
+        }
+
+        function displayAlerts(data) {
+            setProgress('progress-container-alerts', 100);
+            hideProgress('progress-container-alerts');
         }
 
         function getTdElement() {
