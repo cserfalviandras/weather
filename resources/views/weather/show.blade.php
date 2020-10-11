@@ -130,76 +130,51 @@
             col.setAttribute('class', 'col');
 
             col.innerHTML = `
-                <div class="current">
-                    <div class="info">
-                        <div>&nbsp;</div>
+            <div class="pl-1">
+                <div class="row">
+                    <div class="col-5">
                         <h4>${data.name}</h4>
-                        <div class="temp">
-                            <div class="row">
-                                <div class="col">
-                                    Current:
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col">
-                                    <div class="row">
-                                        <div class="col"><small><small>TEMP:</small></small></div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col">${data.main.temp} <small>&deg;C</small></div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col">
-                                            <small><small>Feels like:</small></small>
-                                            <br>
-                                            ${data.main.feels_like} <small>&deg;C</small>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col">
-                                    <div class="row">
-                                        <div class="col"><small><small>HUMIDITY:</small></small></div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col">${data.main.humidity} <small>%</small></div>
-                                    </div>
-                                </div>
-
-                                <div class="col">
-                                    <div class="row">
-                                        <div class="col"><small><small>WIND:</small></small></div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col">${data.wind.speed} <small>meter/sec</small></div>
-                                    </div>
-                                </div>
-
-                                <div class="col">
-                                    <div class="row">
-                                        <div class="col"><small><small>SUN:</small></small></div>
-                                    </div>
-                                    <div class="row">
-                                        <small><small>Rise:</small></small>
-                                        <br>
-                                        <div class="col">${data.sys.sunrise}</div>
-                                    </div>
-                                    <div class="row">
-                                        <small><small>Set:</small></small>
-                                        <br>
-                                        <div class="col">${data.sys.sunset}</div>
-                                    </div>
-                                </div>
-                            </div>
-                        <div>&nbsp;</div>
+                    </div>
+                    <div class="col-3" id="current-icon-container"></div>
+                    <div class="col-4">
+                        <b>${data.main.temp}</b> <small>&deg;C</small>
+                        (${data.main.feels_like} <small>&deg;C</small>)
                     </div>
                 </div>
+
+                <hr>
+
+                <div class="row">
+                    <div class="col text-center">
+                        <small><small>HUMIDITY:</small></small><br>
+                        ${data.main.humidity} <small>%</small>
+                    </div>
+                    <div class="col text-center">
+                        <small><small>SUNRISE:</small></small><br>
+                        ${data.sys.sunrise}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col text-center">
+                        <small><small>WIND:</small></small><br>
+                        ${data.wind.speed} <small>m/s</small>
+                    </div>
+                    <div class="col text-center">
+                        <small><small>SUNSET:</small></small><br>
+                        ${data.sys.sunset}
+                    </div>
+                </div>
+            </div>    
             `;
 
             row.appendChild(col);
             
             let weatherDetailContainer = document.getElementById("weather-current-container");
             weatherDetailContainer.appendChild(row);
+
+            let currentIconContainer = document.getElementById('current-icon-container');
+            currentIconContainer.appendChild(getWeatherIcon(data.weather));
+
             setProgress('progress-container-current', 100);
             fadeInEffect(weatherDetailContainer);
         }
