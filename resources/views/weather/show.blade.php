@@ -10,13 +10,18 @@
                 <div class="col-sm-6 mt-2">
                     <div class="card">
                         <div class="card-header">
-                            Current 
+                            <a class="collapsed d-block" data-toggle="collapse" href="#current-body-container" aria-expanded="true" aria-controls="collapse-collapsed" id="heading-collapsed">
+                                <i class="fa fa-chevron-down pull-right"></i>
+                                Current 
+                            </a>
                         </div>
-                        <div class="card-body" style="min-height:150px;">
-                            <div id="progress-container-current" class="progress col" style="height: 1;">
-                                <div id="progress-bar" class="progress-bar" role="progressbar" style="width: 1%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                        <div id="current-body-container" class="collapse show" aria-labelledby="heading-collapsed">
+                            <div class="card-body" style="min-height:150px;">
+                                <div id="progress-container-current" class="progress col" style="height: 1;">
+                                    <div id="progress-bar" class="progress-bar" role="progressbar" style="width: 1%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                                <div id="weather-current-container" style="opacity: 0;"></div>
                             </div>
-                            <div id="weather-current-container" style="opacity: 0;"></div>
                         </div>
                     </div>
                 </div>
@@ -24,13 +29,18 @@
                 <div class="col-sm-6 mt-2">
                     <div class="card">
                         <div class="card-header">
-                            Next hours
+                            <a class="collapsed d-block" data-toggle="collapse" href="#next-hours-body-container" aria-expanded="true" aria-controls="collapse-collapsed" id="heading-collapsed">
+                                <i class="fa fa-chevron-down pull-right"></i>
+                                Next hours 
+                            </a>
                         </div>
-                        <div class="card-body" style="min-height:150px;">
-                            <div id="progress-container-next-hours" class="progress col" style="height: 1;">
-                                <div id="progress-bar" class="progress-bar" role="progressbar" style="width: 1%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                        <div id="next-hours-body-container" class="collapse" aria-labelledby="heading-collapsed">
+                            <div class="card-body" style="min-height:150px;">
+                                <div id="progress-container-next-hours" class="progress col" style="height: 1;">
+                                    <div id="progress-bar" class="progress-bar" role="progressbar" style="width: 1%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                                <canvas id="weather-48hours-canvas" style="opacity: 0;" width="400" height="400"></canvas>
                             </div>
-                            <canvas id="weather-48hours-canvas" style="opacity: 0;" width="400" height="400"></canvas>
                         </div>
                       </div>
                 </div>
@@ -38,13 +48,18 @@
                 <div class="col-sm-6 mt-2">
                     <div class="card">
                         <div class="card-header">
-                            Next 7 days
+                            <a class="collapsed d-block" data-toggle="collapse" href="#next-days-body-container" aria-expanded="true" aria-controls="collapse-collapsed" id="heading-collapsed">
+                                <i class="fa fa-chevron-down pull-right"></i>
+                                Next 7 days 
+                            </a>
                         </div>
-                        <div class="card-body" style="min-height:150px;">
-                            <div id="progress-container-next-days" class="progress col" style="height: 1;">
-                                <div id="progress-bar" class="progress-bar" role="progressbar" style="width: 1%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                        <div id="next-days-body-container" class="collapse show" aria-labelledby="heading-collapsed">
+                            <div class="card-body" style="min-height:150px;">
+                                <div id="progress-container-next-days" class="progress col" style="height: 1;">
+                                    <div id="progress-bar" class="progress-bar" role="progressbar" style="width: 1%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                                <div id="daily-weather-table-container-1" class="col" style="opacity: 0;"></div>
                             </div>
-                            <div id="daily-weather-table-container-1" class="col"></div>
                         </div>
                   </div>
                 </div>
@@ -411,7 +426,7 @@
                 } else {
                     clearInterval(fadeEffect2);
                 }
-            }, 300);
+            }, 200);
         }
 
         function fadeOutEffect(element)
