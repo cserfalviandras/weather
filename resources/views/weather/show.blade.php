@@ -15,7 +15,7 @@
                             </a>
                         </div>
                         <div id="current-body-container" class="collapse show" aria-labelledby="heading-collapsed">
-                            <div class="card-body" style="min-height:150px;">
+                            <div class="card-body py-2 px-0" style="min-height:150px;">
                                 <div id="progress-container-current" class="progress col" style="height: 1;">
                                     <div id="progress-bar" class="progress-bar" role="progressbar" style="width: 1%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
@@ -33,7 +33,7 @@
                             </a>
                         </div>
                         <div id="next-hours-body-container" class="collapse" aria-labelledby="heading-collapsed">
-                            <div class="card-body" style="min-height:150px;">
+                            <div class="card-body py-2 px-0" style="min-height:150px;">
                                 <div id="progress-container-next-hours" class="progress col" style="height: 1;">
                                     <div id="progress-bar" class="progress-bar" role="progressbar" style="width: 1%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
@@ -51,11 +51,11 @@
                             </a>
                         </div>
                         <div id="next-days-body-container" class="collapse show" aria-labelledby="heading-collapsed">
-                            <div class="card-body" style="min-height:150px;">
+                            <div class="card-body py-2 px-0" style="min-height:150px;">
                                 <div id="progress-container-next-days" class="progress col" style="height: 1;">
                                     <div id="progress-bar" class="progress-bar" role="progressbar" style="width: 1%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
-                                <div id="daily-weather-table-container-1" class="col" style="opacity: 0;"></div>
+                                <div id="daily-weather-table-container-1" style="opacity: 0;"></div>
                             </div>
                         </div>
                   </div>
@@ -347,15 +347,18 @@
 
         function displayDailyWeatherTable(data) {
             let table = document.createElement('table');
+            table.setAttribute('class', 'table table-striped');
 
             data.daily.forEach(dailyData => {
                 let tr = document.createElement('tr');
 
-                let td1 = document.createElement('td');
-                let td2 = document.createElement('td');
-                let td3 = document.createElement('td');
-                let td7 = document.createElement('td');
-                let tds = document.createElement('td');
+                let td1 = getTdElement();
+                let td2 = getTdElement();
+                let td3 = getTdElement();
+                let td7 = getTdElement();
+                let tds = getTdElement();
+
+                td1.setAttribute('class', 'pl-1');
 
                 td1.innerHTML = getWeekDay(dailyData.dt);
                 td2.appendChild(getWeatherIcon(dailyData.weather));
@@ -378,6 +381,13 @@
             fadeInEffect(weatherDataContainer);
         }
 
+        function getTdElement() {
+            let td = document.createElement('td');
+            td.setAttribute('class', 'p-0')
+
+            return td;
+        }
+
         function getWeatherIcon(weather) {
             let div = document.createElement('div');
 
@@ -385,7 +395,7 @@
                 let divInner = document.createElement('div');
 
                 divInner.innerHTML = `
-                    <div id="icon"><img id="wicon" src="http://openweathermap.org/img/wn/${weatherData.icon}@2x.png" alt="Weather icon"></div>
+                    <div id="icon"><img id="wicon" src="http://openweathermap.org/img/wn/${weatherData.icon}.png" alt="Weather icon"></div>
                 `;
 
                 div.appendChild(divInner);
