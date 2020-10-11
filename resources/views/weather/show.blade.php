@@ -6,12 +6,6 @@
     <div class="row">
         <div class="col">
 
-            <div class="row mt-3">
-                <div id="progress-container" class="progress col" style="height: 1;">
-                    <div id="progress-bar" class="progress-bar" role="progressbar" style="width: 1%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                </div>
-            </div>
-
             <div class="row mb-3">
                 <div class="col-sm-6 mt-2">
                     <div class="card">
@@ -19,6 +13,9 @@
                             Current 
                         </div>
                         <div class="card-body" style="min-height:150px;">
+                            <div id="progress-container-current" class="progress col" style="height: 1;">
+                                <div id="progress-bar" class="progress-bar" role="progressbar" style="width: 1%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
                             <div id="weather-current-container" style="opacity: 0;"></div>
                         </div>
                     </div>
@@ -30,6 +27,9 @@
                             Next hours
                         </div>
                         <div class="card-body" style="min-height:150px;">
+                            <div id="progress-container-next-hours" class="progress col" style="height: 1;">
+                                <div id="progress-bar" class="progress-bar" role="progressbar" style="width: 1%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
                             <canvas id="weather-48hours-canvas" style="opacity: 0;" width="400" height="400"></canvas>
                         </div>
                       </div>
@@ -41,6 +41,9 @@
                             Next 7 days
                         </div>
                         <div class="card-body" style="min-height:150px;">
+                            <div id="progress-container-next-days" class="progress col" style="height: 1;">
+                                <div id="progress-bar" class="progress-bar" role="progressbar" style="width: 1%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
                             <div id="daily-weather-table-container-1" class="col"></div>
                         </div>
                   </div>
@@ -52,7 +55,10 @@
     let city = @json($city);
 
     (function() {
-        setProgress(50);
+        setProgress('progress-container-current', 20);
+        setProgress('progress-container-next-hours', 20);
+        setProgress('progress-container-next-days', 20);
+
         let urlCurrent = window.location.origin + `/weather/${city}/getWeather`;
         let urlDetailed = window.location.origin + `/weather/${city}/detailedForecast`;
 
@@ -84,14 +90,18 @@
 
         function displayCurrent(data) {
             console.log(data);
+            setProgress('progress-container-current', 60);
+            hideProgress('progress-container-current');
 
             displayCurrentWeatherData(data);
         }
 
         function displayDetailed(data) {
             console.log(data);
-            setProgress(100);
-            hideProgress();
+            setProgress('progress-container-next-hours', 60);
+            setProgress('progress-container-next-days', 60);
+            hideProgress('progress-container-next-hours');
+            hideProgress('progress-container-next-days');
     
             display48HoursWeatherDiagram(data);
             displayDailyWeatherTable(data);
@@ -178,6 +188,7 @@
             
             let weatherDetailContainer = document.getElementById("weather-current-container");
             weatherDetailContainer.appendChild(row);
+            setProgress('progress-container-current', 100);
             fadeInEffect(weatherDetailContainer);
         }
 
@@ -224,6 +235,7 @@
                 }
             });
 
+            setProgress('progress-container-next-hours', 100);
             fadeInEffect(canvas);
         }
 
@@ -350,6 +362,7 @@
             
             let weatherDataContainer = document.getElementById("daily-weather-table-container-1");
             weatherDataContainer.appendChild(table);
+            setProgress('progress-container-current', 100);
             fadeInEffect(weatherDataContainer);
         }
 
@@ -369,17 +382,18 @@
             return div;
         }
 
-        function setProgress(value) {
-            let progressBar = document.getElementById("progress-bar");
+        function setProgress(containerId, value) {
+            let container = document.getElementById(containerId);
+            let progressBar = container.childNodes[1];
 
             progressBar.style.width = value + '%';
         }
 
-        function hideProgress() 
+        function hideProgress(containerId) 
         {
-            let progressBar = document.getElementById("progress-bar");
+            let container = document.getElementById(containerId);
 
-            fadeOutEffect(progressBar);
+            fadeOutEffect(container);
         }
 
         function fadeInEffect(element)
@@ -397,7 +411,7 @@
                 } else {
                     clearInterval(fadeEffect2);
                 }
-            }, 200);
+            }, 300);
         }
 
         function fadeOutEffect(element)
