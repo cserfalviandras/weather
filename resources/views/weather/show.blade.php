@@ -12,23 +12,39 @@
                 </div>
             </div>
 
-            <div class="row">
-                <div id="weather-current-container" style="opacity: 0;" class="col"></div>
-            </div>
-            
-            <div class="row mt-3">
-                <div id="weather-48hours-container" style="opacity: 0;" class="col"></div>
+            <div class="row mb-3">
+                <div class="col-sm-6 mt-2">
+                    <div class="card">
+                        <div class="card-header">
+                            Current 
+                        </div>
+                        <div class="card-body" style="min-height:150px;">
+                            <div id="weather-current-container" style="opacity: 0;"></div>
+                        </div>
+                    </div>
+                </div>
 
-                <canvas id="weather-48hours-canvas" style="opacity: 0;" width="400" height="400"></canvas>
-            </div>
+                <div class="col-sm-6 mt-2">
+                    <div class="card">
+                        <div class="card-header">
+                            Next hours
+                        </div>
+                        <div class="card-body" style="min-height:150px;">
+                            <canvas id="weather-48hours-canvas" style="opacity: 0;" width="400" height="400"></canvas>
+                        </div>
+                      </div>
+                </div>
 
-            <div class="row mt-3">
-                <div id="weather-daily-container" style="opacity: 0;" class="col"></div>
-
-                {{-- <canvas id="weather-daily-canvas" style="opacity: 0;" width="400" height="400"></canvas> --}}
-            </div>
-            <div class="row">
-                <div id="daily-weather-table-container-1" class="col"></div>
+                <div class="col-sm-6 mt-2">
+                    <div class="card">
+                        <div class="card-header">
+                            Next 7 days
+                        </div>
+                        <div class="card-body" style="min-height:150px;">
+                            <div id="daily-weather-table-container-1" class="col"></div>
+                        </div>
+                  </div>
+                </div>
             </div>
         </div>
     </div>
@@ -58,10 +74,7 @@
             hideProgress();
     
             displayCurrentWeatherData(data);
-            display48HoursWeatherHeader(data);
             display48HoursWeatherDiagram(data);
-            displayDailyWeatherHeader();
-            // displayDailyWeatherDiagram(data);
             displayDailyWeatherTable(data);
         }
 
@@ -149,22 +162,6 @@
             fadeInEffect(weatherDetailContainer);
         }
 
-        function display48HoursWeatherHeader(data)
-        {
-            let titleBlock = document.createElement('div');
-            titleBlock.innerHTML = `
-                <div class="row">
-                    <div class="col">
-                        Next hours:
-                    </div>
-                </div>
-            `;
-        
-            let weatherDataContainer = document.getElementById("weather-48hours-container");
-            weatherDataContainer.appendChild(titleBlock);
-            fadeInEffect(weatherDataContainer);
-        }
-
         function display48HoursWeatherDiagram(data)
         {
             let times = [];
@@ -209,22 +206,6 @@
             });
 
             fadeInEffect(canvas);
-        }
-
-        function displayDailyWeatherHeader()
-        {
-            let titleBlock = document.createElement('div');
-            titleBlock.innerHTML = `
-                <div class="row">
-                    <div class="col">
-                        Next 7 days:
-                    </div>
-                </div>
-            `;
-        
-            let weatherDataContainer = document.getElementById("weather-daily-container");
-            weatherDataContainer.appendChild(titleBlock);
-            fadeInEffect(weatherDataContainer);
         }
 
         function displayDailyWeatherDiagram(data)
