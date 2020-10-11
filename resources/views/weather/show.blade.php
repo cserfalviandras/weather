@@ -53,9 +53,10 @@
 
     (function() {
         setProgress(50);
-        let url = window.location.origin + `/weather/${city}/detailedForecast`;
+        let urlCurrent = window.location.origin + `/weather/${city}/getWeather`;
+        let urlDetailed = window.location.origin + `/weather/${city}/detailedForecast`;
 
-        fetch(url).then((response) => {
+        fetch(urlCurrent).then((response) => {
             if (response.ok) {
                 return response;
             } else {
@@ -63,17 +64,35 @@
             }
         })
         .then(response => response.json())
-        .then(data => displayWeatherData(data))
+        .then(data => displayCurrent(data))
         .catch((error) => {
             console.log(error)
         });
 
-        function displayWeatherData(data) {
+        fetch(urlDetailed).then((response) => {
+            if (response.ok) {
+                return response;
+            } else {
+                throw new Error('Something went wrong');
+            }
+        })
+        .then(response => response.json())
+        .then(data => displayDetailed(data))
+        .catch((error) => {
+            console.log(error)
+        });
+
+        function displayCurrent(data) {
+            console.log(data);
+
+            displayCurrentWeatherData(data);
+        }
+
+        function displayDetailed(data) {
             console.log(data);
             setProgress(100);
             hideProgress();
     
-            displayCurrentWeatherData(data);
             display48HoursWeatherDiagram(data);
             displayDailyWeatherTable(data);
         }
