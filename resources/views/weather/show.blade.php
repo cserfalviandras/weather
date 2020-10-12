@@ -175,7 +175,7 @@
                 <div class="row">
                     <div class="col text-center">
                         <small><small>WIND:</small></small><br>
-                        ${data.wind.speed} <small>m/s</small>
+                        ${data.wind.speed * 3.6} <small>km/h</small>
                     </div>
                     <div class="col text-center">
                         <small><small>SUNSET:</small></small><br>
