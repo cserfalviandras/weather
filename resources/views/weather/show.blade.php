@@ -387,6 +387,7 @@
                 let tr1 = document.createElement('tr');
 
                 let td1 = getTdElement();
+                let td11 = getTdElement();
                 let td21 = getTdElement();
                 let td22 = getTdElement();
 
@@ -397,10 +398,12 @@
                 i.innerHTML = 'warning';
 
                 td1.appendChild(i);
+                td11.innerHTML = `${convertDate(alertData.start)} - ${convertDate(alertData.end)}`;
                 td21.innerHTML = alertData.event;
                 td22.innerHTML = `${alertData.description}<br><small><small>${alertData.sender_name}</small></small>`;
 
                 tr1.appendChild(td1);
+                tr1.appendChild(td11);
                 tr1.appendChild(td21);
                 tr1.appendChild(td22);
 
@@ -498,7 +501,24 @@
             let m = "0" + dt.getMinutes()
             let t = h + ":" + m.substr(-2)
 
+            console.log(unixTime, dt, h, m, t);
+
             return t
+        }
+
+        function convertDate(unixTime) {
+            let months_arr = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+            let date = new Date(unixTime*1000);
+            let year = date.getFullYear();
+            let month = months_arr[date.getMonth()];
+            let day = date.getDate();
+            let hours = date.getHours();
+            let minutes = "0" + date.getMinutes();
+            let seconds = "0" + date.getSeconds();
+
+            let convdataTime = month+'-'+day+'-'+year+' '+hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+
+            return convdataTime;
         }
 
         function getWeekDay(dt) {
