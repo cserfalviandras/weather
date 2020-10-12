@@ -33,7 +33,7 @@
                             </a>
                         </div>
                         <div id="alerts-outter-container" class="collapse" aria-labelledby="heading-collapsed">
-                            <div class="card-body py-2 px-0" style="min-height:150px;">
+                            <div class="card-body py-2 px-0" style="min-height:50px;">
                                 <div id="progress-container-alerts" class="progress col" style="height: 1;">
                                     <div id="progress-bar" class="progress-bar" role="progressbar" style="width: 1%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
@@ -353,7 +353,7 @@
                 let td7 = getTdElement();
                 let tds = getTdElement();
 
-                td1.setAttribute('class', 'pl-1');
+                td1.setAttribute('class', 'pl-1 font-weight-bold');
 
                 td1.innerHTML = getWeekDay(dailyData.dt);
                 td2.appendChild(getWeatherIcon(dailyData.weather));
@@ -392,7 +392,8 @@
                 let tdEvent = getTdElement();
                 let tdDesc = getTdElement();
 
-                tdIcon.setAttribute('class', 'pr-2');
+                tdIcon.style.textAlign = "center";
+                tdEvent.style.textAlign = "center";
 
                 let i = document.createElement('i');
                 i.setAttribute('class', 'material-icons');
@@ -507,8 +508,6 @@
             let h = dt.getHours()
             let m = "0" + dt.getMinutes()
             let t = h + ":" + m.substr(-2)
-
-            console.log(unixTime, dt, h, m, t);
 
             return t
         }
