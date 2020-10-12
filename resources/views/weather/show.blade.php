@@ -380,37 +380,44 @@
         function displayAlerts(data) {
             let alertsContainer = document.getElementById('alerts-container');
 
-            let table = document.createElement('table');
-            table.setAttribute('class', 'table table-striped');
-
             data.alerts.forEach(alertData => {
+                let table = document.createElement('table');
+                table.setAttribute('class', 'pb-1');
+
                 let tr1 = document.createElement('tr');
+                let tr2 = document.createElement('tr');
 
-                let td1 = getTdElement();
-                let td11 = getTdElement();
-                let td21 = getTdElement();
-                let td22 = getTdElement();
+                let tdIcon = getTdElement();
+                let tdDate = getTdElement();
+                let tdEvent = getTdElement();
+                let tdDesc = getTdElement();
 
-                td1.setAttribute('class', 'pr-2');
+                tdIcon.setAttribute('class', 'pr-2');
 
                 let i = document.createElement('i');
                 i.setAttribute('class', 'material-icons');
                 i.innerHTML = 'warning';
 
-                td1.appendChild(i);
-                td11.innerHTML = `${convertDate(alertData.start)} - ${convertDate(alertData.end)}`;
-                td21.innerHTML = alertData.event;
-                td22.innerHTML = `${alertData.description}<br><small><small>${alertData.sender_name}</small></small>`;
+                let smallDateElement = document.createElement('small');
+                smallDateElement.setAttribute('class', 'font-weight-bold')
+                smallDateElement.innerHTML = `${convertDate(alertData.start)} - ${convertDate(alertData.end)}`;
 
-                tr1.appendChild(td1);
-                tr1.appendChild(td11);
-                tr1.appendChild(td21);
-                tr1.appendChild(td22);
+                tdIcon.appendChild(i);
+                tdDate.appendChild(smallDateElement);
+                tdEvent.innerHTML = alertData.event;
+                tdDesc.innerHTML = `${alertData.description}<br><small><small>${alertData.sender_name}</small></small>`;
+
+                tr1.appendChild(tdIcon);
+                tr1.appendChild(tdDate);
+                tr2.appendChild(tdEvent);
+                tr2.appendChild(tdDesc);
 
                 table.appendChild(tr1);
-            });
+                table.appendChild(tr2);
 
-            alertsContainer.appendChild(table);
+                alertsContainer.appendChild(table);
+                alertsContainer.appendChild(document.createElement('hr'));
+            });
 
             setProgress('progress-container-alerts', 100);
             hideProgress('progress-container-alerts');
