@@ -33,7 +33,7 @@
                             </a>
                         </div>
                         <div id="alerts-outter-container" class="collapse" aria-labelledby="heading-collapsed">
-                            <div class="card-body py-2 px-0" style="min-height:150px;">
+                            <div class="card-body py-2 px-0" style="min-height:50px;">
                                 <div id="progress-container-alerts" class="progress col" style="height: 1;">
                                     <div id="progress-bar" class="progress-bar" role="progressbar" style="width: 1%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
@@ -353,7 +353,7 @@
                 let td7 = getTdElement();
                 let tds = getTdElement();
 
-                td1.setAttribute('class', 'pl-1');
+                td1.setAttribute('class', 'pl-1 font-weight-bold');
 
                 td1.innerHTML = getWeekDay(dailyData.dt);
                 td2.appendChild(getWeatherIcon(dailyData.weather));
@@ -380,34 +380,45 @@
         function displayAlerts(data) {
             let alertsContainer = document.getElementById('alerts-container');
 
-            let table = document.createElement('table');
-            table.setAttribute('class', 'table table-striped');
-
             data.alerts.forEach(alertData => {
+                let table = document.createElement('table');
+                table.setAttribute('class', 'pb-1');
+
                 let tr1 = document.createElement('tr');
+                let tr2 = document.createElement('tr');
 
-                let td1 = getTdElement();
-                let td21 = getTdElement();
-                let td22 = getTdElement();
+                let tdIcon = getTdElement();
+                let tdDate = getTdElement();
+                let tdEvent = getTdElement();
+                let tdDesc = getTdElement();
 
-                td1.setAttribute('class', 'pr-2');
+                tdIcon.style.textAlign = "center";
+                tdEvent.style.textAlign = "center";
 
                 let i = document.createElement('i');
                 i.setAttribute('class', 'material-icons');
                 i.innerHTML = 'warning';
 
-                td1.appendChild(i);
-                td21.innerHTML = alertData.event;
-                td22.innerHTML = `${alertData.description}<br><small><small>${alertData.sender_name}</small></small>`;
+                let smallDateElement = document.createElement('small');
+                smallDateElement.setAttribute('class', 'font-weight-bold')
+                smallDateElement.innerHTML = `${convertDate(alertData.start)} - ${convertDate(alertData.end)}`;
 
-                tr1.appendChild(td1);
-                tr1.appendChild(td21);
-                tr1.appendChild(td22);
+                tdIcon.appendChild(i);
+                tdDate.appendChild(smallDateElement);
+                tdEvent.innerHTML = alertData.event;
+                tdDesc.innerHTML = `${alertData.description}<br><small><small>${alertData.sender_name}</small></small>`;
+
+                tr1.appendChild(tdIcon);
+                tr1.appendChild(tdDate);
+                tr2.appendChild(tdEvent);
+                tr2.appendChild(tdDesc);
 
                 table.appendChild(tr1);
-            });
+                table.appendChild(tr2);
 
-            alertsContainer.appendChild(table);
+                alertsContainer.appendChild(table);
+                alertsContainer.appendChild(document.createElement('hr'));
+            });
 
             setProgress('progress-container-alerts', 100);
             hideProgress('progress-container-alerts');
@@ -499,6 +510,21 @@
             let t = h + ":" + m.substr(-2)
 
             return t
+        }
+
+        function convertDate(unixTime) {
+            let months_arr = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+            let date = new Date(unixTime*1000);
+            let year = date.getFullYear();
+            let month = months_arr[date.getMonth()];
+            let day = date.getDate();
+            let hours = date.getHours();
+            let minutes = "0" + date.getMinutes();
+            let seconds = "0" + date.getSeconds();
+
+            let convdataTime = month+'-'+day+'-'+year+' '+hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+
+            return convdataTime;
         }
 
         function getWeekDay(dt) {
