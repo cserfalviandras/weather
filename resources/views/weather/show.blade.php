@@ -380,45 +380,57 @@
         function displayAlerts(data) {
             let alertsContainer = document.getElementById('alerts-container');
 
-            data.alerts.forEach(alertData => {
-                let table = document.createElement('table');
-                table.setAttribute('class', 'pb-1');
+            if (undefined === data.alerts) {
+                let div = document.createElement('div');
+                div.innerHTML = `
+                    <div class="container d-flex h-100">
+                        <div class="row justify-content-center align-self-center">
+                            No alerts
+                        </div>
+                    </div>
+                `;
+                alertsContainer.appendChild(div);
+            } else {
+                data.alerts.forEach(alertData => {
+                    let table = document.createElement('table');
+                    table.setAttribute('class', 'pb-1');
 
-                let tr1 = document.createElement('tr');
-                let tr2 = document.createElement('tr');
+                    let tr1 = document.createElement('tr');
+                    let tr2 = document.createElement('tr');
 
-                let tdIcon = getTdElement();
-                let tdDate = getTdElement();
-                let tdEvent = getTdElement();
-                let tdDesc = getTdElement();
+                    let tdIcon = getTdElement();
+                    let tdDate = getTdElement();
+                    let tdEvent = getTdElement();
+                    let tdDesc = getTdElement();
 
-                tdIcon.style.textAlign = "center";
-                tdEvent.style.textAlign = "center";
+                    tdIcon.style.textAlign = "center";
+                    tdEvent.style.textAlign = "center";
 
-                let i = document.createElement('i');
-                i.setAttribute('class', 'material-icons');
-                i.innerHTML = 'warning';
+                    let i = document.createElement('i');
+                    i.setAttribute('class', 'material-icons');
+                    i.innerHTML = 'warning';
 
-                let smallDateElement = document.createElement('small');
-                smallDateElement.setAttribute('class', 'font-weight-bold')
-                smallDateElement.innerHTML = `${convertDate(alertData.start)} - ${convertDate(alertData.end)}`;
+                    let smallDateElement = document.createElement('small');
+                    smallDateElement.setAttribute('class', 'font-weight-bold')
+                    smallDateElement.innerHTML = `${convertDate(alertData.start)} - ${convertDate(alertData.end)}`;
 
-                tdIcon.appendChild(i);
-                tdDate.appendChild(smallDateElement);
-                tdEvent.innerHTML = alertData.event;
-                tdDesc.innerHTML = `${alertData.description}<br><small><small>${alertData.sender_name}</small></small>`;
+                    tdIcon.appendChild(i);
+                    tdDate.appendChild(smallDateElement);
+                    tdEvent.innerHTML = alertData.event;
+                    tdDesc.innerHTML = `${alertData.description}<br><small><small>${alertData.sender_name}</small></small>`;
 
-                tr1.appendChild(tdIcon);
-                tr1.appendChild(tdDate);
-                tr2.appendChild(tdEvent);
-                tr2.appendChild(tdDesc);
+                    tr1.appendChild(tdIcon);
+                    tr1.appendChild(tdDate);
+                    tr2.appendChild(tdEvent);
+                    tr2.appendChild(tdDesc);
 
-                table.appendChild(tr1);
-                table.appendChild(tr2);
+                    table.appendChild(tr1);
+                    table.appendChild(tr2);
 
-                alertsContainer.appendChild(table);
-                alertsContainer.appendChild(document.createElement('hr'));
-            });
+                    alertsContainer.appendChild(table);
+                    alertsContainer.appendChild(document.createElement('hr'));
+                });
+            }
 
             setProgress('progress-container-alerts', 100);
             hideProgress('progress-container-alerts');
