@@ -7,8 +7,8 @@
         <div class="col">
 
             <div class="row mb-3">
-                <div class="col-sm-6 mt-2">
-                    <div class="card">
+                <div class="col">
+                    <div class="card mt-2">
                         <div class="card-header">
                             <a class="collapsed d-block" data-toggle="collapse" href="#current-body-container" aria-expanded="true" aria-controls="collapse-collapsed" id="heading-collapsed">
                                 Current 
@@ -23,10 +23,8 @@
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="col-sm-6 mt-2">
-                    <div class="card">
+                    <div class="card mt-2">
                         <div class="card-header">
                             <a class="collapsed d-block" data-toggle="collapse" href="#alerts-outter-container" aria-expanded="true" aria-controls="collapse-collapsed" id="heading-collapsed">
                                 Alerts 
@@ -40,11 +38,9 @@
                                 <div id="alerts-container" class="pl-1" style="opacity: 0;"></div>
                             </div>
                         </div>
-                      </div>
-                </div>
+                    </div>
 
-                <div class="col-sm-6 mt-2">
-                    <div class="card">
+                    <div class="card mt-2">
                         <div class="card-header">
                             <a class="collapsed d-block" data-toggle="collapse" href="#next-hours-body-container" aria-expanded="true" aria-controls="collapse-collapsed" id="heading-collapsed">
                                 Next hours 
@@ -58,11 +54,9 @@
                                 <canvas id="weather-48hours-canvas" style="opacity: 0;" width="400" height="400"></canvas>
                             </div>
                         </div>
-                      </div>
-                </div>
+                    </div>
 
-                <div class="col-sm-6 mt-2">
-                    <div class="card">
+                    <div class="card mt-2">
                         <div class="card-header">
                             <a class="collapsed d-block" data-toggle="collapse" href="#next-days-body-container" aria-expanded="true" aria-controls="collapse-collapsed" id="heading-collapsed">
                                 Next 7 days 
@@ -76,7 +70,7 @@
                                 <div id="daily-weather-table-container-1" style="opacity: 0;"></div>
                             </div>
                         </div>
-                  </div>
+                    </div>
                 </div>
             </div>
         </div>
