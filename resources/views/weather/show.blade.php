@@ -126,7 +126,7 @@
             setProgress('progress-container-alerts', 60);
             setProgress('progress-container-next-days', 60);
     
-            display48HoursWeatherDiagram(data);
+            // display48HoursWeatherDiagram(data);
             displayDailyWeatherTable(data);
             displayAlerts(data);
         }
@@ -237,100 +237,6 @@
 
             setProgress('progress-container-next-hours', 100);
             hideProgress('progress-container-next-hours');
-            fadeInEffect(canvas);
-        }
-
-        function displayDailyWeatherDiagram(data)
-        {
-            let labels = [];
-            let maxes = [];
-            let mins = [];
-            let backgroundColorsMaxes = [];
-            let borderColorsMaxes = [];
-            let backgroundColorsMins = [];
-            let borderColorsMins = [];
-
-            data.daily.forEach(dailyData => {
-                maxes.push(dailyData.temp.max);
-                mins.push(dailyData.temp.min);
-
-                labels.push(
-                    getWeekDay(dailyData.dt) + '\n' + 
-                    getRain(dailyData.rain || 0) + '\n' + 
-                    getPrecipitationPercent(dailyData.pop)
-                );
-
-                backgroundColorsMaxes.push('rgba(255, 99, 132, 0.2)');
-                borderColorsMaxes.push('rgba(255, 99, 132, 1)');
-                backgroundColorsMins.push('rgba(174, 200, 242, 0.8)');
-                borderColorsMins.push('rgba(174, 200, 242, 1)');
-            });
-            
-            let canvas = document.getElementById('weather-daily-canvas');
-            let ctx = canvas.getContext('2d');
-            let myChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: labels,
-                    datasets: [
-                        {
-                            data: maxes,
-                            backgroundColor: backgroundColorsMaxes,
-                            borderColor: borderColorsMaxes,
-                            borderWidth: 1
-                        },
-                        {
-                            data: mins,
-                            backgroundColor: backgroundColorsMins,
-                            borderColor: borderColorsMins,
-                            borderWidth: 1
-                        }
-                    ]
-                },
-                options: {
-                    scales: {
-                        yAxes: [{
-                            ticks: {
-                                beginAtZero: true
-                            }
-                        }],
-                        xAxes: [{
-                            stacked: true
-                        }]
-                    },
-                    legend : {
-                        display: false
-                    },
-                    animation: {
-                        duration: 1,
-                        onComplete: function () {
-                            var chartInstance = this.chart,
-                            ctx = chartInstance.ctx;
-                            ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontFamily);
-                            ctx.textAlign = 'center';
-                            ctx.textBaseline = 'bottom';
-
-                            this.data.datasets.forEach(function (dataset, i) {
-                                var meta = chartInstance.controller.getDatasetMeta(i);
-                                meta.data.forEach(function (bar, index) {
-                                    var data = dataset.data[index];                            
-                                    ctx.fillText(data, bar._model.x, bar._model.y - 5);
-                                });
-                            });
-                        }
-                    }
-                },
-                plugins: [{
-                    beforeInit: function(chart) {
-                        chart.data.labels.forEach(function(e, i, a) {
-                            if (/\n/.test(e)) {
-                                a[i] = e.split(/\n/);
-                            }
-                        });
-                    }
-                }]
-            });
-
             fadeInEffect(canvas);
         }
 
