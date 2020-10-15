@@ -260,7 +260,7 @@
                 td1.innerHTML = convertTime(hourlyData.dt);
                 td2.appendChild(getWeatherIcon(hourlyData.weather));
                 td4.innerHTML = ` ${hourlyData.temp}  <small>&deg;C</small>`;
-                td5.innerHTML = ` ${getHourlyRain(hourlyData.rain)}<br>${getPrecipitationPercent(hourlyData.pop)}`;
+                td5.innerHTML = ` ${getHourlyRain(hourlyData.rain)}<br>${getPrecipitationPercent(hourlyData)}`;
 
                 tr.appendChild(td1);
                 tr.appendChild(td2);
@@ -296,7 +296,7 @@
                 td1.innerHTML = getWeekDay(dailyData.dt);
                 td2.appendChild(getWeatherIcon(dailyData.weather));
                 td3.innerHTML = ` ${dailyData.temp.max}  <small>&deg;C</small><br>${dailyData.temp.min} <small>&deg;C</small>`;
-                td7.innerHTML = ` ${getRain(dailyData.rain)}<br>${getPrecipitationPercent(dailyData.pop)}`;
+                td7.innerHTML = ` ${getRain(dailyData.rain)}<br>${getPrecipitationPercent(dailyData)}`;
 
                 tr.appendChild(td1);
                 tr.appendChild(td2);
@@ -486,7 +486,13 @@
             return weekDays[d.getDay()];
         }
 
-        function getPrecipitationPercent(popValue) {
+        function getPrecipitationPercent(hourlyData) {
+            if (hourlyData.rain === undefined) {
+                return '';
+            }
+            
+            let popValue = hourlyData.pop;
+
             let percent = Math.floor(popValue * 100);
 
             return percent == 0 ? '' : '(' + percent + ' %)';
