@@ -306,6 +306,8 @@
                     tdIcon.style.textAlign = "center";
                     tdEvent.style.textAlign = "center";
 
+                    tdEvent.setAttribute('class', 'px-2');
+
                     let i = document.createElement('i');
                     i.setAttribute('class', 'material-icons');
                     i.innerHTML = 'warning';
