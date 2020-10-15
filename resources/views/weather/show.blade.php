@@ -51,7 +51,7 @@
                                 <div id="progress-container-next-hours" class="progress col" style="height: 1;">
                                     <div id="progress-bar" class="progress-bar" role="progressbar" style="width: 1%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
-                                <canvas id="weather-48hours-canvas" style="opacity: 0;" width="400" height="400"></canvas>
+                                <div id="weather-48hours-table-container" style="opacity: 0;"></div>
                             </div>
                         </div>
                     </div>
@@ -127,6 +127,7 @@
             setProgress('progress-container-next-days', 60);
     
             // display48HoursWeatherDiagram(data);
+            display48HoursWeatherTable(data);
             displayDailyWeatherTable(data);
             displayAlerts(data);
         }
@@ -238,6 +239,43 @@
             setProgress('progress-container-next-hours', 100);
             hideProgress('progress-container-next-hours');
             fadeInEffect(canvas);
+        }
+
+        function display48HoursWeatherTable(data)
+        {
+            let table = document.createElement('table');
+            table.setAttribute('class', 'table table-striped');
+
+            data.hourly.forEach(hourlyData => {
+                let tr = document.createElement('tr');
+
+                let td1 = getTdElement();
+                let td2 = getTdElement();
+                let td3 = getTdElement();
+                let td4 = getTdElement();
+                let td5 = getTdElement();
+
+                td1.setAttribute('class', 'pl-1 font-weight-bold');
+
+                td1.innerHTML = convertTime(hourlyData.dt);
+                td2.appendChild(getWeatherIcon(hourlyData.weather));
+                td4.innerHTML = ` ${hourlyData.temp}  <small>&deg;C</small>`;
+                td5.innerHTML = ` ${getHourlyRain(hourlyData.rain)}<br>${getPrecipitationPercent(hourlyData.pop)}`;
+
+                tr.appendChild(td1);
+                tr.appendChild(td2);
+                tr.appendChild(td3);
+                tr.appendChild(td4);
+                tr.appendChild(td5);
+
+                table.appendChild(tr);
+            });
+
+            let weatherDataContainer = document.getElementById("weather-48hours-table-container");
+            weatherDataContainer.appendChild(table);
+            setProgress('progress-container-next-hours', 100);
+            hideProgress('progress-container-next-hours');
+            fadeInEffect(weatherDataContainer);
         }
 
         function displayDailyWeatherTable(data) {
@@ -459,6 +497,14 @@
                 return rain + ' mm';
             }
             
+            return '';
+        }
+
+        function getHourlyRain(rain) {
+            if (rain !== undefined) {
+                return Object.values(rain)[0] + ' mm';
+            }
+
             return '';
         }
     })();
