@@ -51,7 +51,7 @@
                                 <div id="progress-container-next-hours" class="progress col" style="height: 1;">
                                     <div id="progress-bar" class="progress-bar" role="progressbar" style="width: 1%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
-                                <canvas id="weather-48hours-canvas" style="opacity: 0;" width="400" height="400"></canvas>
+                                <div id="weather-48hours-table-container" style="opacity: 0;"></div>
                             </div>
                         </div>
                     </div>
@@ -126,7 +126,8 @@
             setProgress('progress-container-alerts', 60);
             setProgress('progress-container-next-days', 60);
     
-            display48HoursWeatherDiagram(data);
+            // display48HoursWeatherDiagram(data);
+            display48HoursWeatherTable(data);
             displayDailyWeatherTable(data);
             displayAlerts(data);
         }
@@ -240,98 +241,41 @@
             fadeInEffect(canvas);
         }
 
-        function displayDailyWeatherDiagram(data)
+        function display48HoursWeatherTable(data)
         {
-            let labels = [];
-            let maxes = [];
-            let mins = [];
-            let backgroundColorsMaxes = [];
-            let borderColorsMaxes = [];
-            let backgroundColorsMins = [];
-            let borderColorsMins = [];
+            let table = document.createElement('table');
+            table.setAttribute('class', 'table table-striped');
 
-            data.daily.forEach(dailyData => {
-                maxes.push(dailyData.temp.max);
-                mins.push(dailyData.temp.min);
+            data.hourly.forEach(hourlyData => {
+                let tr = document.createElement('tr');
 
-                labels.push(
-                    getWeekDay(dailyData.dt) + '\n' + 
-                    getRain(dailyData.rain || 0) + '\n' + 
-                    getPrecipitationPercent(dailyData.pop)
-                );
+                let td1 = getTdElement();
+                let td2 = getTdElement();
+                let td3 = getTdElement();
+                let td4 = getTdElement();
+                let td5 = getTdElement();
 
-                backgroundColorsMaxes.push('rgba(255, 99, 132, 0.2)');
-                borderColorsMaxes.push('rgba(255, 99, 132, 1)');
-                backgroundColorsMins.push('rgba(174, 200, 242, 0.8)');
-                borderColorsMins.push('rgba(174, 200, 242, 1)');
-            });
-            
-            let canvas = document.getElementById('weather-daily-canvas');
-            let ctx = canvas.getContext('2d');
-            let myChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: labels,
-                    datasets: [
-                        {
-                            data: maxes,
-                            backgroundColor: backgroundColorsMaxes,
-                            borderColor: borderColorsMaxes,
-                            borderWidth: 1
-                        },
-                        {
-                            data: mins,
-                            backgroundColor: backgroundColorsMins,
-                            borderColor: borderColorsMins,
-                            borderWidth: 1
-                        }
-                    ]
-                },
-                options: {
-                    scales: {
-                        yAxes: [{
-                            ticks: {
-                                beginAtZero: true
-                            }
-                        }],
-                        xAxes: [{
-                            stacked: true
-                        }]
-                    },
-                    legend : {
-                        display: false
-                    },
-                    animation: {
-                        duration: 1,
-                        onComplete: function () {
-                            var chartInstance = this.chart,
-                            ctx = chartInstance.ctx;
-                            ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontFamily);
-                            ctx.textAlign = 'center';
-                            ctx.textBaseline = 'bottom';
+                td1.setAttribute('class', 'pl-1 font-weight-bold');
 
-                            this.data.datasets.forEach(function (dataset, i) {
-                                var meta = chartInstance.controller.getDatasetMeta(i);
-                                meta.data.forEach(function (bar, index) {
-                                    var data = dataset.data[index];                            
-                                    ctx.fillText(data, bar._model.x, bar._model.y - 5);
-                                });
-                            });
-                        }
-                    }
-                },
-                plugins: [{
-                    beforeInit: function(chart) {
-                        chart.data.labels.forEach(function(e, i, a) {
-                            if (/\n/.test(e)) {
-                                a[i] = e.split(/\n/);
-                            }
-                        });
-                    }
-                }]
+                td1.innerHTML = convertTime(hourlyData.dt);
+                td2.appendChild(getWeatherIcon(hourlyData.weather));
+                td4.innerHTML = ` ${hourlyData.temp}  <small>&deg;C</small>`;
+                td5.innerHTML = ` ${getHourlyRain(hourlyData.rain)}<br>${getPrecipitationPercent(hourlyData)}`;
+
+                tr.appendChild(td1);
+                tr.appendChild(td2);
+                tr.appendChild(td3);
+                tr.appendChild(td4);
+                tr.appendChild(td5);
+
+                table.appendChild(tr);
             });
 
-            fadeInEffect(canvas);
+            let weatherDataContainer = document.getElementById("weather-48hours-table-container");
+            weatherDataContainer.appendChild(table);
+            setProgress('progress-container-next-hours', 100);
+            hideProgress('progress-container-next-hours');
+            fadeInEffect(weatherDataContainer);
         }
 
         function displayDailyWeatherTable(data) {
@@ -352,7 +296,7 @@
                 td1.innerHTML = getWeekDay(dailyData.dt);
                 td2.appendChild(getWeatherIcon(dailyData.weather));
                 td3.innerHTML = ` ${dailyData.temp.max}  <small>&deg;C</small><br>${dailyData.temp.min} <small>&deg;C</small>`;
-                td7.innerHTML = ` ${getRain(dailyData.rain)}<br>${getPrecipitationPercent(dailyData.pop)}`;
+                td7.innerHTML = ` ${getRain(dailyData.rain)}<br>${getPrecipitationPercent(dailyData)}`;
 
                 tr.appendChild(td1);
                 tr.appendChild(td2);
@@ -399,6 +343,8 @@
 
                     tdIcon.style.textAlign = "center";
                     tdEvent.style.textAlign = "center";
+
+                    tdEvent.setAttribute('class', 'px-2');
 
                     let i = document.createElement('i');
                     i.setAttribute('class', 'material-icons');
@@ -540,7 +486,13 @@
             return weekDays[d.getDay()];
         }
 
-        function getPrecipitationPercent(popValue) {
+        function getPrecipitationPercent(hourlyData) {
+            if (hourlyData.rain === undefined) {
+                return '';
+            }
+            
+            let popValue = hourlyData.pop;
+
             let percent = Math.floor(popValue * 100);
 
             return percent == 0 ? '' : '(' + percent + ' %)';
@@ -551,6 +503,14 @@
                 return rain + ' mm';
             }
             
+            return '';
+        }
+
+        function getHourlyRain(rain) {
+            if (rain !== undefined) {
+                return Object.values(rain)[0] + ' mm';
+            }
+
             return '';
         }
     })();
