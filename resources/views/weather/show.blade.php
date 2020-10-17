@@ -125,8 +125,7 @@
             setProgress('progress-container-next-hours', 60);
             setProgress('progress-container-alerts', 60);
             setProgress('progress-container-next-days', 60);
-    
-            // display48HoursWeatherDiagram(data);
+
             display48HoursWeatherTable(data);
             displayDailyWeatherTable(data);
             displayAlerts(data);
@@ -145,14 +144,15 @@
             col.innerHTML = `
             <div class="pl-1">
                 <div class="row">
-                    <div class="col-5">
+                    <div class="col text-center">
                         <h4>${data.name}</h4>
                     </div>
-                    <div class="col-3" id="current-icon-container"></div>
-                    <div class="col-4">
+                    <div class="col text-center" id="current-icon-container"></div>
+                    <div class="col text-center">
                         <b>${data.main.temp}</b> <small>&deg;C</small><br>
                         (${data.main.feels_like} <small>&deg;C</small>)
                     </div>
+                    <div class="col"></div>
                 </div>
 
                 <hr>
@@ -163,14 +163,12 @@
                         ${data.main.humidity} <small>%</small>
                     </div>
                     <div class="col text-center">
-                        <small><small>SUNRISE:</small></small><br>
-                        ${data.sys.sunrise}
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col text-center">
                         <small><small>WIND:</small></small><br>
                         ${getWindSpeedInKpH(data.wind.speed)} <small>km/h</small>
+                    </div>
+                    <div class="col text-center">
+                        <small><small>SUNRISE:</small></small><br>
+                        ${data.sys.sunrise}
                     </div>
                     <div class="col text-center">
                         <small><small>SUNSET:</small></small><br>
