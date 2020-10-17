@@ -170,7 +170,7 @@
                 <div class="row">
                     <div class="col text-center">
                         <small><small>WIND:</small></small><br>
-                        ${data.wind.speed * 3.6} <small>km/h</small>
+                        ${getWindSpeedInKpH(data.wind.speed)} <small>km/h</small>
                     </div>
                     <div class="col text-center">
                         <small><small>SUNSET:</small></small><br>
@@ -512,6 +512,10 @@
             }
 
             return '';
+        }
+
+        function getWindSpeedInKpH(windSpeedMpS) {
+            return Math.floor(windSpeedMpS * 3.6);
         }
     })();
     
